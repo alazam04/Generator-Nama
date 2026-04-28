@@ -3,184 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generator Nama Pro</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<title>Generator & Link Order</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: #eef2f7;
+body{
+  margin:0;
+  font-family: Arial;
+  background:#eef2f7;
 }
 
-.header {
-  text-align: center;
-  padding: 20px;
-  font-weight: bold;
-  font-size: 20px;
+/* HEADER */
+.header{
+  text-align:center;
+  padding:15px;
+  font-weight:bold;
 }
 
-.card {
-  background: white;
-  margin: 15px;
-  padding: 18px;
-  border-radius: 18px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+/* CARD */
+.card{
+  background:white;
+  margin:15px;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.08);
 }
 
-.btn {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(90deg,#3b82f6,#06b6d4);
-  color: white;
-  font-size: 15px;
-  cursor: pointer;
+/* BUTTON */
+.btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(90deg,#3b82f6,#06b6d4);
+  color:white;
+  cursor:pointer;
 }
 
-.input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  margin: 8px 0;
+/* LIST */
+.item{
+  background:#f8fafc;
+  padding:10px;
+  border-radius:10px;
+  margin-top:8px;
 }
 
-.item {
-  background: #f8fafc;
-  padding: 10px;
-  border-radius: 10px;
-  margin-top: 6px;
+.item a{
+  text-decoration:none;
+  color:#3b82f6;
+  font-size:13px;
 }
 
-.toast {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #333;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 20px;
-  opacity: 0;
-  transition: 0.3s;
+/* NAV */
+.navbar{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  display:flex;
+  justify-content:space-around;
+  background:white;
+  padding:10px;
+  box-shadow:0 -3px 10px rgba(0,0,0,0.1);
 }
-.toast.show { opacity: 1; }
 
-.navbar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: white;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px;
-  box-shadow: 0 -3px 15px rgba(0,0,0,0.1);
+.navbar div{
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">✨ GENERATOR NAMA PRO ✨</div>
+<div class="header">✨ GENERATOR & ORDER ✨</div>
 
-<div class="card">
-
-<select id="kategori" class="input">
-  <option value="islami">Islami</option>
-  <option value="indonesia">Indonesia</option>
-  <option value="luar">Luar Negeri</option>
-</select>
-
-<select id="gender" class="input">
-  <option value="l">Laki-laki</option>
-  <option value="p">Perempuan</option>
-</select>
-
-<button class="btn" onclick="generateNama()">🔀 Generate & Copy</button>
-
-<div id="hasil" style="margin-top:10px;text-align:center;font-weight:bold;"></div>
-
+<!-- MENU NAMA -->
+<div id="menuNama" class="card">
+  <h3>NAMA</h3>
+  <button class="btn" onclick="generateNama()">Generate Nama</button>
+  <div id="hasil" style="margin-top:10px;font-weight:bold;"></div>
 </div>
 
-<div class="card">
-  <b>Riwayat</b>
-  <div id="list"></div>
+<!-- MENU LINK -->
+<div id="menuLink" class="card" style="display:none;">
+  <h3>LINK ORDER</h3>
+  <div id="links"></div>
 </div>
 
+<!-- NAVBAR -->
 <div class="navbar">
-  <div>🏠</div>
-  <div>⭐</div>
-  <div>🕒</div>
-  <div>⚙️</div>
+  <div onclick="showMenu('nama')">🏠<br>Nama</div>
+  <div onclick="showMenu('link')">🛒<br>Order</div>
 </div>
-
-<div id="toast" class="toast">Disalin!</div>
 
 <script>
-// DATA BESAR (1000+ kombinasi per kategori)
-
-const islamiL = ["Ahmad","Muhammad","Ali","Hassan","Husain","Yusuf","Ibrahim","Ismail","Umar","Zaid","Harun","Fahmi","Rizki","Salman","Taufik","Imran","Akbar","Fikri","Rafi","Zaki","Ilham","Naufal","Azmi"];
-const islamiP = ["Aisyah","Fatimah","Zahra","Khadijah","Maryam","Safira","Nabila","Aulia","Salsabila","Amira","Hana","Rania","Najwa","Syifa","Raisa"];
-
-const indoL = ["Budi","Agus","Joko","Bayu","Dedi","Eko","Hendra","Rudi","Tono","Wahyu","Rizky","Fajar","Arif","Yoga","Dimas"];
-const indoP = ["Siti","Dewi","Rina","Putri","Wati","Lestari","Indah","Sari","Ayu","Ningsih","Kartika","Fitri"];
-
-const luarL = ["Daniel","Michael","Lucas","Ethan","James","David","Noah","Henry","Leo","Jack","Ryan","Adam"];
-const luarP = ["Sophia","Emma","Olivia","Ava","Mia","Lily","Chloe","Ella","Grace","Zoe","Hannah"];
-
-const tengah = ["Rahman","Saputra","Wijaya","Pratama","Nugraha","Santoso","Hakim","Karim","Maulana","Firdaus","Anderson","Smith","Brown","Taylor"];
+// ====== GENERATOR NAMA ======
+const depan=["Ahmad","Budi","Siti","Rina","Michael","Aisyah","Daniel","Putri"];
+const belakang=["Santoso","Wijaya","Saputra","Pratama","Smith","Brown","Rahman"];
 
 function random(a){return a[Math.floor(Math.random()*a.length)]}
 
-let riwayat = JSON.parse(localStorage.getItem("riwayat"))||[];
-
-function showToast(){
-  let t=document.getElementById("toast");
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),1500);
-}
-
 function generateNama(){
-  let kategori = document.getElementById("kategori").value;
-  let gender = document.getElementById("gender").value;
-
-  let depan, mid, belakang;
-
-  if(kategori==="islami"){
-    depan = (gender==="l") ? random(islamiL) : random(islamiP);
-  } else if(kategori==="indonesia"){
-    depan = (gender==="l") ? random(indoL) : random(indoP);
-  } else {
-    depan = (gender==="l") ? random(luarL) : random(luarP);
-  }
-
-  mid = random(tengah);
-  belakang = random(tengah);
-
-  let nama = depan + " " + mid + " " + belakang;
-
-  document.getElementById("hasil").innerText = nama;
-
+  let nama=random(depan)+" "+random(belakang);
+  document.getElementById("hasil").innerText=nama;
   navigator.clipboard.writeText(nama);
-  showToast();
-
-  riwayat.unshift(nama);
-  localStorage.setItem("riwayat", JSON.stringify(riwayat));
-  render();
 }
 
-function render(){
+// ====== MENU SWITCH ======
+function showMenu(menu){
+  document.getElementById("menuNama").style.display=(menu==="nama")?"block":"none";
+  document.getElementById("menuLink").style.display=(menu==="link")?"block":"none";
+}
+
+// ====== DATA LINK ORDER ======
+const data = [
+{nama:"AWAW", link:"https://s.shopee.co.id/6VKFY7rZoL"},
+{nama:"AWAW", link:"https://s.shopee.co.id/6px5wm8CN6"},
+{nama:"AWAW", link:"https://s.shopee.co.id/901aWmbQPp"},
+{nama:"AWAW", link:"https://s.shopee.co.id/7ppd8fwWIc"},
+
+{nama:"WHITE CYBER", link:"https://s.shopee.co.id/9fHHK4KU73"},
+{nama:"ALFA DIGITAL", link:"https://s.shopee.co.id/4qC1ZEp4uu"},
+{nama:"SRIBUFOLLS", link:"https://s.shopee.co.id/3Vgdyp7e4p"},
+{nama:"HELENA STUFF", link:"https://s.shopee.co.id/AADXv6H81t"},
+{nama:"SECRET PANEL", link:"https://s.shopee.co.id/4AwKm7hE75"},
+{nama:"PROMETIXPANEL", link:"https://s.shopee.co.id/9KeQve7UK9"},
+{nama:"YOAKE", link:"https://s.shopee.co.id/8fOk8T99r5"},
+{nama:"YOAKE", link:"https://s.shopee.co.id/3LNDmhKKrw"},
+
+{nama:"MAMA - WHITE CYBER", link:"https://s.shopee.co.id/2g7J598NmS"}
+];
+
+// ====== RENDER LINK ======
+function renderLinks(){
   let html="";
-  riwayat.slice(0,10).forEach(e=>{
-    html+=`<div class="item">${e}</div>`;
+  data.forEach(d=>{
+    html+=`
+      <div class="item">
+        <b>${d.nama}</b><br>
+        <a href="${d.link}" target="_blank">${d.link}</a>
+      </div>
+    `;
   });
-  document.getElementById("list").innerHTML=html;
+  document.getElementById("links").innerHTML=html;
 }
 
-render();
+renderLinks();
 </script>
 
 </body>
