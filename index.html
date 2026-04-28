@@ -37,14 +37,6 @@ body{
   cursor:pointer;
 }
 
-.input{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #ccc;
-  margin-top:10px;
-}
-
 .item{
   background:#f8fafc;
   padding:10px;
@@ -97,12 +89,14 @@ body{
   <div id="hasil" style="margin-top:10px;font-weight:bold;"></div>
 </div>
 
-<!-- OTP -->
+<!-- OTP AUTO -->
 <div class="card">
-  <h3>OTP HeroSMS</h3>
-  <input id="idOtp" class="input" placeholder="Masukkan ID order">
-  <button class="btn" onclick="ambilOTP()">Ambil OTP</button>
-  <div id="otp" style="font-size:20px;font-weight:bold;margin-top:10px;">-</div>
+  <h3>OTP AUTO</h3>
+
+  <div>ID: <span id="id">-</span></div>
+  <div>📱 Nomor: <span id="nomor">-</span></div>
+
+  <div id="otp" style="font-size:22px;font-weight:bold;margin-top:5px;">-</div>
 </div>
 
 <!-- LINK -->
@@ -170,34 +164,27 @@ function showToast(){
   setTimeout(()=>t.classList.remove("show"),1500);
 }
 
-// ===== OTP =====
+// ===== OTP AUTO =====
 function ambilOTP(){
-  let id = document.getElementById("idOtp").value;
-
-  if(!id){
-    document.getElementById("otp").innerText="Masukkan ID dulu";
-    return;
-  }
-
-  fetch(`https://generator-nama.vercel.app/api/otp?id=${id}`)
+  fetch("https://generator-nama.vercel.app/api/otp")
     .then(res=>res.json())
     .then(data=>{
-      document.getElementById("otp").innerText=data.otp;
+      document.getElementById("id").innerText = data.id || "-";
+      document.getElementById("nomor").innerText = data.number || "-";
+      document.getElementById("otp").innerText = data.otp || "-";
 
       if(data.otp && data.otp !== "Menunggu OTP"){
-  navigator.clipboard.writeText(data.otp);
-}
+        navigator.clipboard.writeText(data.otp);
+      }
     })
     .catch(()=>{
       document.getElementById("otp").innerText="Error";
     });
 }
 
-// AUTO REFRESH OTP
-setInterval(()=>{
-  let id = document.getElementById("idOtp").value;
-  if(id) ambilOTP();
-},5000);
+// AUTO REFRESH
+setInterval(ambilOTP,5000);
+ambilOTP();
 
 // INIT
 renderLinks();
