@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generator Premium</title>
+<title>Generator Nama Pro</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
@@ -14,7 +14,6 @@ body {
   background: #eef2f7;
 }
 
-/* HEADER */
 .header {
   text-align: center;
   padding: 20px;
@@ -22,7 +21,6 @@ body {
   font-size: 20px;
 }
 
-/* CARD */
 .card {
   background: white;
   margin: 15px;
@@ -31,7 +29,6 @@ body {
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-/* BUTTON */
 .btn {
   width: 100%;
   padding: 14px;
@@ -41,56 +38,23 @@ body {
   color: white;
   font-size: 15px;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.btn:active {
-  transform: scale(0.97);
-}
-
-/* INPUT */
 .input {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #ddd;
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
-/* LIST */
 .item {
   background: #f8fafc;
-  padding: 12px;
+  padding: 10px;
   border-radius: 10px;
-  margin-top: 8px;
-  display: flex;
-  justify-content: space-between;
+  margin-top: 6px;
 }
 
-/* NAVBAR */
-.navbar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: white;
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  box-shadow: 0 -3px 15px rgba(0,0,0,0.1);
-}
-
-.navbar div {
-  font-size: 12px;
-  text-align: center;
-  color: #888;
-}
-
-.active {
-  color: #3b82f6;
-  font-weight: bold;
-}
-
-/* TOAST */
 .toast {
   position: fixed;
   bottom: 80px;
@@ -103,53 +67,75 @@ body {
   opacity: 0;
   transition: 0.3s;
 }
+.toast.show { opacity: 1; }
 
-.toast.show {
-  opacity: 1;
+.navbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  box-shadow: 0 -3px 15px rgba(0,0,0,0.1);
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">✨ NAMA ACAK GENERATOR ✨</div>
+<div class="header">✨ GENERATOR NAMA PRO ✨</div>
 
-<!-- GENERATOR -->
 <div class="card">
-  <button class="btn" onclick="generateNama()">🔀 Generate & Copy Nama</button>
-  <div id="hasil" style="text-align:center;margin-top:10px;font-weight:bold;"></div>
+
+<select id="kategori" class="input">
+  <option value="islami">Islami</option>
+  <option value="indonesia">Indonesia</option>
+  <option value="luar">Luar Negeri</option>
+</select>
+
+<select id="gender" class="input">
+  <option value="l">Laki-laki</option>
+  <option value="p">Perempuan</option>
+</select>
+
+<button class="btn" onclick="generateNama()">🔀 Generate & Copy</button>
+
+<div id="hasil" style="margin-top:10px;text-align:center;font-weight:bold;"></div>
+
 </div>
 
-<!-- EMAIL -->
-<div class="card">
-  <b>Email Generator</b>
-  <input id="email" class="input" readonly>
-  <button class="btn" onclick="generateEmail()">Generate Email</button>
-</div>
-
-<!-- RIWAYAT -->
 <div class="card">
   <b>Riwayat</b>
   <div id="list"></div>
 </div>
 
-<!-- NAVBAR -->
 <div class="navbar">
-  <div class="active">🏠<br>Home</div>
-  <div>⭐<br>Favorit</div>
-  <div>🕒<br>Riwayat</div>
-  <div>⚙️<br>Setting</div>
+  <div>🏠</div>
+  <div>⭐</div>
+  <div>🕒</div>
+  <div>⚙️</div>
 </div>
 
 <div id="toast" class="toast">Disalin!</div>
 
 <script>
-const suku1=["ba","da","ra","za","ka","la","na","sa","ma","xo","vi"];
-const suku2=["ran","din","tan","mon","lin","zor","vin","tor","xel","nor"];
+// DATA BESAR (1000+ kombinasi per kategori)
 
-let riwayat=JSON.parse(localStorage.getItem("riwayat"))||[];
+const islamiL = ["Ahmad","Muhammad","Ali","Hassan","Husain","Yusuf","Ibrahim","Ismail","Umar","Zaid","Harun","Fahmi","Rizki","Salman","Taufik","Imran","Akbar","Fikri","Rafi","Zaki","Ilham","Naufal","Azmi"];
+const islamiP = ["Aisyah","Fatimah","Zahra","Khadijah","Maryam","Safira","Nabila","Aulia","Salsabila","Amira","Hana","Rania","Najwa","Syifa","Raisa"];
+
+const indoL = ["Budi","Agus","Joko","Bayu","Dedi","Eko","Hendra","Rudi","Tono","Wahyu","Rizky","Fajar","Arif","Yoga","Dimas"];
+const indoP = ["Siti","Dewi","Rina","Putri","Wati","Lestari","Indah","Sari","Ayu","Ningsih","Kartika","Fitri"];
+
+const luarL = ["Daniel","Michael","Lucas","Ethan","James","David","Noah","Henry","Leo","Jack","Ryan","Adam"];
+const luarP = ["Sophia","Emma","Olivia","Ava","Mia","Lily","Chloe","Ella","Grace","Zoe","Hannah"];
+
+const tengah = ["Rahman","Saputra","Wijaya","Pratama","Nugraha","Santoso","Hakim","Karim","Maulana","Firdaus","Anderson","Smith","Brown","Taylor"];
 
 function random(a){return a[Math.floor(Math.random()*a.length)]}
+
+let riwayat = JSON.parse(localStorage.getItem("riwayat"))||[];
 
 function showToast(){
   let t=document.getElementById("toast");
@@ -158,34 +144,40 @@ function showToast(){
 }
 
 function generateNama(){
-  let nama=random(suku1)+random(suku2);
-  document.getElementById("hasil").innerText=nama;
+  let kategori = document.getElementById("kategori").value;
+  let gender = document.getElementById("gender").value;
+
+  let depan, mid, belakang;
+
+  if(kategori==="islami"){
+    depan = (gender==="l") ? random(islamiL) : random(islamiP);
+  } else if(kategori==="indonesia"){
+    depan = (gender==="l") ? random(indoL) : random(indoP);
+  } else {
+    depan = (gender==="l") ? random(luarL) : random(luarP);
+  }
+
+  mid = random(tengah);
+  belakang = random(tengah);
+
+  let nama = depan + " " + mid + " " + belakang;
+
+  document.getElementById("hasil").innerText = nama;
+
   navigator.clipboard.writeText(nama);
   showToast();
-}
 
-function generateEmail(){
-  let email=random(suku1)+random(suku2)+Math.floor(Math.random()*100)+"@gmail.com";
-  document.getElementById("email").value=email;
-  
-  riwayat.unshift(email);
-  localStorage.setItem("riwayat",JSON.stringify(riwayat));
+  riwayat.unshift(nama);
+  localStorage.setItem("riwayat", JSON.stringify(riwayat));
   render();
-  navigator.clipboard.writeText(email);
-  showToast();
 }
 
 function render(){
   let html="";
   riwayat.slice(0,10).forEach(e=>{
-    html+=`<div class="item" onclick="copy('${e}')">${e}</div>`;
+    html+=`<div class="item">${e}</div>`;
   });
   document.getElementById("list").innerHTML=html;
-}
-
-function copy(text){
-  navigator.clipboard.writeText(text);
-  showToast();
 }
 
 render();
