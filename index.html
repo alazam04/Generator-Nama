@@ -184,9 +184,9 @@ function ambilOTP(){
     .then(data=>{
       document.getElementById("otp").innerText=data.otp;
 
-      if(data.otp && data.otp !== "-"){
-        navigator.clipboard.writeText(data.otp);
-      }
+      if(data.otp && data.otp !== "Menunggu OTP"){
+  navigator.clipboard.writeText(data.otp);
+}
     })
     .catch(()=>{
       document.getElementById("otp").innerText="Error";
