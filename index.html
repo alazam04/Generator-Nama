@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generator + OTP + Order</title>
+<title>All Tool</title>
 
 <style>
 body{
   margin:0;
-  font-family: Arial;
+  font-family:Arial;
   background:#eef2f7;
 }
 
@@ -37,6 +37,14 @@ body{
   cursor:pointer;
 }
 
+.input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  margin-top:10px;
+}
+
 .item{
   background:#f8fafc;
   padding:10px;
@@ -48,7 +56,7 @@ body{
   text-decoration:none;
   color:#3b82f6;
   font-size:13px;
-  word-break: break-all;
+  word-break:break-all;
 }
 
 .copy-btn{
@@ -91,9 +99,10 @@ body{
 
 <!-- OTP -->
 <div class="card">
-  <h3>OTP HeroSMS (Auto)</h3>
-  <div>ID: <span id="id">-</span></div>
-  <div id="otp" style="font-size:20px;font-weight:bold;margin-top:5px;">-</div>
+  <h3>OTP HeroSMS</h3>
+  <input id="idOtp" class="input" placeholder="Masukkan ID order">
+  <button class="btn" onclick="ambilOTP()">Ambil OTP</button>
+  <div id="otp" style="font-size:20px;font-weight:bold;margin-top:10px;">-</div>
 </div>
 
 <!-- LINK -->
@@ -161,13 +170,19 @@ function showToast(){
   setTimeout(()=>t.classList.remove("show"),1500);
 }
 
-// ===== OTP AUTO =====
+// ===== OTP =====
 function ambilOTP(){
-  fetch("https://generator-nama.vercel.app/api/otp") // 🔥 ganti link kamu
+  let id = document.getElementById("idOtp").value;
+
+  if(!id){
+    document.getElementById("otp").innerText="Masukkan ID dulu";
+    return;
+  }
+
+  fetch(`https://generator-nama.vercel.app/api/otp?id=${id}`)
     .then(res=>res.json())
     .then(data=>{
-      document.getElementById("id").innerText=data.id || "-";
-      document.getElementById("otp").innerText=data.otp || "-";
+      document.getElementById("otp").innerText=data.otp;
 
       if(data.otp && data.otp !== "-"){
         navigator.clipboard.writeText(data.otp);
@@ -178,9 +193,11 @@ function ambilOTP(){
     });
 }
 
-// AUTO REFRESH
-setInterval(ambilOTP,5000);
-ambilOTP();
+// AUTO REFRESH OTP
+setInterval(()=>{
+  let id = document.getElementById("idOtp").value;
+  if(id) ambilOTP();
+},5000);
 
 // INIT
 renderLinks();
