@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generator & Link Order</title>
+<title>Generator + OTP + Order</title>
 
 <style>
 body{
@@ -62,7 +62,6 @@ body{
   cursor:pointer;
 }
 
-/* TOAST */
 .toast{
   position:fixed;
   bottom:20px;
@@ -75,53 +74,56 @@ body{
   opacity:0;
   transition:0.3s;
 }
-.toast.show{
-  opacity:1;
-}
+.toast.show{opacity:1;}
 </style>
 </head>
 
 <body>
 
-<div class="header">✨ GENERATOR & LINK ORDER ✨</div>
+<div class="header">✨ TOOL ALL-IN-ONE ✨</div>
 
 <!-- NAMA -->
 <div class="card">
-  <h3>Nama</h3>
+  <h3>Generator Nama</h3>
   <button class="btn" onclick="generateNama()">Generate & Copy</button>
   <div id="hasil" style="margin-top:10px;font-weight:bold;"></div>
 </div>
 
-<!-- LINK ORDER -->
+<!-- OTP -->
+<div class="card">
+  <h3>OTP HeroSMS (Auto)</h3>
+  <div>ID: <span id="id">-</span></div>
+  <div id="otp" style="font-size:20px;font-weight:bold;margin-top:5px;">-</div>
+</div>
+
+<!-- LINK -->
 <div class="card">
   <h3>Link Order</h3>
   <div id="links"></div>
 </div>
 
-<div id="toast" class="toast">Link disalin!</div>
+<div id="toast" class="toast">Disalin!</div>
 
 <script>
 // ===== NAMA =====
 const depan=["Ahmad","Budi","Siti","Rina","Michael","Aisyah","Daniel","Putri"];
 const belakang=["Santoso","Wijaya","Saputra","Pratama","Smith","Brown","Rahman"];
 
-function random(a){
-  return a[Math.floor(Math.random()*a.length)];
-}
+function random(a){return a[Math.floor(Math.random()*a.length)]}
 
 function generateNama(){
-  let nama = random(depan)+" "+random(belakang);
-  document.getElementById("hasil").innerText = nama;
+  let nama=random(depan)+" "+random(belakang);
+  document.getElementById("hasil").innerText=nama;
   navigator.clipboard.writeText(nama);
+  showToast();
 }
 
-// ===== LINK DATA =====
+// ===== LINK =====
 const data = [
 {nama:"AWAW", link:"https://s.shopee.co.id/6VKFY7rZoL"},
 {nama:"AWAW", link:"https://s.shopee.co.id/6px5wm8CN6"},
 {nama:"AWAW", link:"https://s.shopee.co.id/901aWmbQPp"},
 {nama:"AWAW", link:"https://s.shopee.co.id/7ppd8fwWIc"},
-
 {nama:"WHITE CYBER", link:"https://s.shopee.co.id/9fHHK4KU73"},
 {nama:"ALFA DIGITAL", link:"https://s.shopee.co.id/4qC1ZEp4uu"},
 {nama:"SRIBUFOLLS", link:"https://s.shopee.co.id/3Vgdyp7e4p"},
@@ -130,28 +132,26 @@ const data = [
 {nama:"PROMETIXPANEL", link:"https://s.shopee.co.id/9KeQve7UK9"},
 {nama:"YOAKE", link:"https://s.shopee.co.id/8fOk8T99r5"},
 {nama:"YOAKE", link:"https://s.shopee.co.id/3LNDmhKKrw"},
-
 {nama:"MAMA - WHITE CYBER", link:"https://s.shopee.co.id/2g7J598NmS"}
 ];
 
-// ===== RENDER =====
 function renderLinks(){
   let html="";
   data.forEach(d=>{
-    html += `
+    html+=`
       <div class="item">
         <b>${d.nama}</b><br>
         <a href="${d.link}" target="_blank">${d.link}</a><br>
-        <button class="copy-btn" onclick="copyLink('${d.link}')">Copy Link</button>
+        <button class="copy-btn" onclick="copyText('${d.link}')">Copy Link</button>
       </div>
     `;
   });
-  document.getElementById("links").innerHTML = html;
+  document.getElementById("links").innerHTML=html;
 }
 
 // ===== COPY =====
-function copyLink(link){
-  navigator.clipboard.writeText(link);
+function copyText(text){
+  navigator.clipboard.writeText(text);
   showToast();
 }
 
@@ -161,6 +161,28 @@ function showToast(){
   setTimeout(()=>t.classList.remove("show"),1500);
 }
 
+// ===== OTP AUTO =====
+function ambilOTP(){
+  fetch("https://generator-nama.vercel.app/api/otp") // 🔥 ganti link kamu
+    .then(res=>res.json())
+    .then(data=>{
+      document.getElementById("id").innerText=data.id || "-";
+      document.getElementById("otp").innerText=data.otp || "-";
+
+      if(data.otp && data.otp !== "-"){
+        navigator.clipboard.writeText(data.otp);
+      }
+    })
+    .catch(()=>{
+      document.getElementById("otp").innerText="Error";
+    });
+}
+
+// AUTO REFRESH
+setInterval(ambilOTP,5000);
+ambilOTP();
+
+// INIT
 renderLinks();
 </script>
 
