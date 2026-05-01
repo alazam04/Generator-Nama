@@ -1,266 +1,287 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aihomestore Panel V12</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-    --bg: #0f172a;
-    --card: #1e293b;
-    --primary: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-    --shopee: linear-gradient(135deg, #ee4d2d 0%, #ff7337 100%);
-    --accent: #fbbf24;
-    --text: #f8fafc;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopee OTP Engine - Tri Server</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #121826;
+            --card-dark: #1e293b;
+            --accent-orange: #f97316;
+            --text-light: #f8fafc;
+        }
 
-body { margin:0; font-family:'Poppins',sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-.container { padding: 20px 15px; max-width: 500px; margin: auto; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 15px;
+        }
 
-.card { background: var(--card); margin-bottom: 20px; padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-.title { font-size: 12px; font-weight: 700; margin-bottom: 15px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; border-left: 4px solid #3b82f6; padding-left: 10px; }
+        .main-card {
+            background-color: var(--card-dark);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+            margin-bottom: 20px;
+        }
 
-.btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: var(--primary); color: white; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
-.btn-shopee { background: var(--shopee); box-shadow: 0 4px 12px rgba(238, 77, 45, 0.3); }
-.btn:active { transform: scale(0.96); opacity: 0.9; }
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #60a5fa;
+            border-left: 4px solid #3b82f6;
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
 
-.otp-container { background: #0f172a; border-radius: 15px; padding: 15px; margin-top: 15px; text-align: center; border: 2px dashed #334155; }
-.otp-box { font-size: 30px; font-weight: 800; color: var(--accent); letter-spacing: 8px; text-indent: 8px; }
-.status-text { font-size: 11px; color: #60a5fa; margin-top: 5px; font-style: italic; }
+        .form-select, .form-control {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 8px;
+        }
 
-.info-grid { margin-top: 15px; display: grid; gap: 8px; }
-.info-item { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.info-label { color: #94a3b8; }
-.info-val { font-weight: 600; color: #f1f5f9; }
+        .form-select:focus {
+            background-color: #0f172a;
+            color: white;
+            border-color: var(--accent-orange);
+            box-shadow: none;
+        }
 
-.result-address { margin-top: 5px; background: rgba(15, 23, 42, 0.5); padding: 15px; border-radius: 12px; font-size: 13px; border: 1px solid rgba(255,255,255,0.1); }
-.address-val { color: #22c55e; font-weight: 600; display: block; }
+        .btn-order {
+            background-color: var(--accent-orange);
+            color: white;
+            font-weight: bold;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
 
-.select-op { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 8px; outline: none; font-family: 'Poppins'; }
+        .btn-order:active {
+            transform: scale(0.98);
+        }
 
-#toast { visibility: hidden; min-width: 200px; background-color: #3b82f6; color: #fff; text-align: center; border-radius: 10px; padding: 12px; position: fixed; z-index: 100; left: 50%; transform: translateX(-50%); bottom: 30px; font-size: 13px; font-weight: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-#toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        .otp-display {
+            background-color: #0f172a;
+            border: 2px dashed #334155;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
 
-@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-@keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        #otp-box {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #fbbf24;
+            letter-spacing: 5px;
+        }
 
-.link-group { background: #0f172a; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.link-label { font-size: 13px; font-weight: 600; cursor: pointer; }
-.icon-btn { background: #334155; border: none; color: white; padding: 6px 10px; border-radius: 6px; font-size: 10px; cursor: pointer; }
-</style>
+        .status-text {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .btn-util {
+            background-color: #334155;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            width: 48%;
+        }
+
+        /* Suara Notif */
+        #notif-sound { display: none; }
+    </style>
 </head>
 <body>
 
-<div id="toast">Disalin!</div>
-
-<div class="container">
-
-    <div class="card">
-        <div class="title">🛍️ Shopee OTP Engine</div>
+    <div class="container" style="max-width: 500px;">
         
-        <div style="display:flex; gap:8px;">
-            <select id="serverSelect" class="form-select ... ">
-    <option value="hero">HERO SMS</option>
-    <option value="rumah">RUMAH OTP</option>
-    <option value="smscode">SMSCODE.GG</option>  
-            </select>
-            <select class="select-op" id="operator" onchange="saveOp()" style="flex:1;">
-                <option value="any">Termurah</option>
-                <option value="telkomsel">Telkomsel</option>
-                <option value="indosat">Indosat</option>
-                <option value="xl">XL Axiata</option>
-                <option value="three">Tri (3)</option>
-                <option value="axis">Axis</option>
-            </select>
+        <div class="main-card">
+            <div class="section-title">🚀 SHOPEE OTP ENGINE</div>
+            
+            <div class="row g-2 mb-3">
+                <div class="col-6">
+                    <select id="serverSelect" class="form-select">
+                        <option value="hero">🏠 HERO SMS</option>
+                        <option value="rumah">🏠 RUMAH OTP</option>
+                        <option value="smscode">🏠 SMSCODE.GG</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <select id="operatorSelect" class="form-select">
+                        <option value="any">Termurah</option>
+                        <option value="indosat">Indosat</option>
+                        <option value="telkomsel">Telkomsel</option>
+                        <option value="xl">XL Axiata</option>
+                        <option value="three">Three (3)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="btn-order" onclick="orderNumber()" id="btnOrder">Ambil Nomor Shopee</button>
+
+            <div class="mt-4">
+                <div class="data-row">
+                    <span class="text-secondary">Order ID</span>
+                    <span id="display-id">-</span>
+                </div>
+                <div class="data-row">
+                    <span class="text-secondary">Nomor HP</span>
+                    <b id="display-number">Ready...</b>
+                </div>
+            </div>
+
+            <div class="otp-display">
+                <div id="otp-box">WAITING</div>
+                <div class="status-text" id="status-desc">Menunggu SMS masuk...</div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-3">
+                <button class="btn-util" onclick="copyNumber()"><i class="fas fa-copy"></i> Copy Nomor</button>
+                <button class="btn-util" onclick="clearData()"><i class="fas fa-trash"></i> Clear Data</button>
+            </div>
         </div>
 
-        <button class="btn btn-shopee" onclick="pesanNomor()" style="margin-top: 4px;">AMBIL NOMOR SHOPEE</button>
-
-        <div class="info-grid">
-            <div class="info-item"><span class="info-label">Order ID</span><span class="info-val" id="id">-</span></div>
-            <div class="info-item"><span class="info-label">Nomor HP</span><span class="info-val" id="nomor">-</span></div>
+        <div class="main-card">
+            <div class="section-title">🏠 NAMA DAN ALAMAT</div>
+            <div id="utility-content" class="p-2 bg-dark rounded border border-secondary" style="font-size: 0.9rem;">
+                <div class="mb-2">Nama: <b id="util-nama" class="text-success">-</b></div>
+                <div class="mb-2">Alamat: <b id="util-alamat" class="text-success">-</b></div>
+                <div>Detail: <b id="util-detail" class="text-success">-</b></div>
+            </div>
+            <button class="btn-util w-100 mt-3" onclick="generateRandomData()">Generate Data Baru</button>
         </div>
 
-        <div class="otp-container">
-            <div class="otp-box" id="otp" onclick="copyTeks('otp', true)">WAITING</div>
-            <div id="status" class="status-text">Ready...</div>
-        </div>
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <button id="btnCopyNomor" class="btn" style="display:none; background:#334155;" onclick="copyTeks('nomor', true)">COPY NOMOR</button>
-            <button id="btnReset" class="btn" style="background:#4b5563; font-size:12px;" onclick="resetOrder()">CLEAR DATA</button>
-        </div>
     </div>
 
-    <div class="card">
-        <div class="title">🏠 NAMA DAN ALAMAT</div>
-        <div class="result-address" id="fullData">
-            Nama: <span class="address-val" id="resNama">-</span>
-            Alamat: <span class="address-val" id="resAlamat">-</span>
-            Detail: <span class="address-val" id="resDetail">-</span>
-        </div>
-        <button class="btn" style="margin-top:10px; background:#334155; font-size:12px;" onclick="generateAndCopy()">COPY DATA</button>
-    </div>
+    <audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
 
-    <div class="card">
-        <div class="title">🔗 Link Order</div>
-        <div id="linkContainer">
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/6VKFY7rZoL')">AWAW 1 ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/6VKFY7rZoL')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/6px5wm8CN6')">AWAW 2 ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/6px5wm8CN6')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/9fHHK4KU73')">WHITE CYBER ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/9fHHK4KU73')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/4qC1ZEp4uu')">ALFA DIGITAL ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/4qC1ZEp4uu')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/3Vgdyp7e4p')">SRIBUFOLLS ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/3Vgdyp7e4p')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/AADXv6H81t')">HELENA STUFF ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/AADXv6H81t')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/4AwKm7hE75')">SECRET PANEL ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/4AwKm7hE75')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/9KeQve7UK9')">PROMETIXPANEL ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/9KeQve7UK9')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/8fOk8T99r5')">YOAKE 1 ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/8fOk8T99r5')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/3LNDmhKKrw')">YOAKE 2 ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/3LNDmhKKrw')">COPY</button></div>
-            <div class="link-group"><span class="link-label" onclick="window.open('https://s.shopee.co.id/2g7J598NmS')">MAMA WHITE CYBER ↗</span><button class="icon-btn" onclick="copyDirect('https://s.shopee.co.id/2g7J598NmS')">COPY</button></div>
-        </div>
-    </div>
+    <script>
+        const API_BASE = "https://aihomestore.alazam04.workers.dev/api";
+        let checkTimer = null;
 
-</div>
+        // Load Memori saat buka web
+        window.onload = () => {
+            if(localStorage.getItem('order_id')) {
+                document.getElementById('display-id').innerText = localStorage.getItem('order_id');
+                document.getElementById('display-number').innerText = localStorage.getItem('phone');
+                startPolling();
+            }
+            // Load pilihan server/operator terakhir
+            if(localStorage.getItem('pref_server')) document.getElementById('serverSelect').value = localStorage.getItem('pref_server');
+            if(localStorage.getItem('pref_op')) document.getElementById('operatorSelect').value = localStorage.getItem('pref_op');
+        };
 
-<script>
-const notifySound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+        async function orderNumber() {
+            const server = document.getElementById('serverSelect').value;
+            const operator = document.getElementById('operatorSelect').value;
+            const btn = document.getElementById('btnOrder');
 
-function showToast(msg) {
-  const x = document.getElementById("toast");
-  x.innerText = msg;
-  x.className = "show";
-  setTimeout(() => { x.className = x.className.replace("show", ""); }, 3000);
-}
+            localStorage.setItem('pref_server', server);
+            localStorage.setItem('pref_op', operator);
 
-// Memory Recovery
-window.onload = () => {
-    if(localStorage.getItem('saved_server')){
-        document.getElementById("server").value = localStorage.getItem('saved_server');
-    }
-    if(localStorage.getItem('saved_op')){
-        document.getElementById("operator").value = localStorage.getItem('saved_op');
-    }
-    if(localStorage.getItem('saved_name')){
-        document.getElementById("resNama").innerText = localStorage.getItem('saved_name');
-        document.getElementById("resAlamat").innerText = localStorage.getItem('saved_addr');
-        document.getElementById("resDetail").innerText = localStorage.getItem('saved_det');
-    }
-    if(localStorage.getItem('saved_id')){
-        orderID = localStorage.getItem('saved_id');
-        document.getElementById("id").innerText = orderID;
-        document.getElementById("nomor").innerText = localStorage.getItem('saved_num');
-        document.getElementById("otp").innerText = localStorage.getItem('saved_otp') || "WAITING";
-        document.getElementById("btnCopyNomor").style.display = "block";
-        timer = setInterval(cekOTP, 5000);
-    }
-};
+            btn.disabled = true;
+            btn.innerText = "Ordering...";
+            document.getElementById('display-number').innerText = "Ordering...";
 
-function saveOp() {
-    localStorage.setItem('saved_server', document.getElementById("server").value);
-    localStorage.setItem('saved_op', document.getElementById("operator").value);
-}
+            try {
+                const res = await fetch(`${API_BASE}/order?server=${server}&operator=${operator}`);
+                const data = await res.json();
 
-const n_depan = ["Ahmad","Budi","Siti","Rina","Dewi","Aisyah","Rizky","Fajar","Eko","Maya","Andi","Sari","Hadi","Yanto","Lestari","Agus","Indah","Mega","Surya","Taufik"];
-const n_belakang = ["Santoso","Pratama","Wijaya","Saputra","Rahman","Firmansyah","Kusuma","Hidayat","Setiawan","Nugroho","Purnama","Gunawan","Wibowo","Suherman","Budiman"];
-const jalan = ["Jl. Mawar","Jl. Melati","Jl. Merdeka","Jl. Sudirman","Jl. Gajah Mada","Jl. Ahmad Yani","Jl. Diponegoro","Jl. Pahlawan","Jl. Kenanga","Jl. Dahlia"];
-const kota = ["Jakarta Selatan","Bandung","Surabaya","Semarang","Medan","Makassar","Bekasi","Tangerang"];
-const kodepos = ["12340","40123","60111","50125","20111","90111","17111","15111"];
+                if (data.id && data.number) {
+                    localStorage.setItem('order_id', data.id);
+                    localStorage.setItem('phone', data.number);
+                    
+                    document.getElementById('display-id').innerText = data.id;
+                    document.getElementById('display-number').innerText = data.number;
+                    document.getElementById('otp-box').innerText = "WAITING";
+                    
+                    startPolling();
+                } else {
+                    alert("Gagal: " + (data.error || "Server sibuk"));
+                    document.getElementById('display-number').innerText = "Ready...";
+                }
+            } catch (e) {
+                alert("Koneksi ke Worker Error");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Ambil Nomor Shopee";
+            }
+        }
 
-function generateAndCopy() {
-    let nama = n_depan[Math.floor(Math.random()*n_depan.length)] + " " + n_belakang[Math.floor(Math.random()*n_belakang.length)];
-    let almt = jalan[Math.floor(Math.random()*jalan.length)] + " No. " + (Math.floor(Math.random()*100)+1);
-    let det = kota[Math.floor(Math.random()*kota.length)] + " (" + kodepos[Math.floor(Math.random()*kodepos.length)] + ")";
-    
-    document.getElementById("resNama").innerText = nama;
-    document.getElementById("resAlamat").innerText = almt;
-    document.getElementById("resDetail").innerText = det;
-    
-    localStorage.setItem('saved_name', nama);
-    localStorage.setItem('saved_addr', almt);
-    localStorage.setItem('saved_det', det);
-    
-    navigator.clipboard.writeText(`Nama: ${nama}\nAlamat: ${almt}\n${det}`);
-    showToast("Data Disalin!");
-}
+        function startPolling() {
+            if(checkTimer) clearInterval(checkTimer);
+            checkTimer = setInterval(checkOTP, 5000); // Cek tiap 5 detik
+        }
 
-let orderID = "";
-let timer;
+        async function checkOTP() {
+            const id = localStorage.getItem('order_id');
+            const server = localStorage.getItem('pref_server');
+            if(!id) return;
 
-function pesanNomor(){
-  resetOrder();
-  const srv = document.getElementById("server").value;
-  const op = document.getElementById("operator").value;
-  
-  document.getElementById("nomor").innerText = "Ordering...";
-  
-  // Mengirim parameter server ke Cloudflare
-  fetch(`https://aihomestore.alazam04.workers.dev/api/order?server=${srv}&operator=${op}`)
-  .then(r => r.json())
-  .then(res => {
-    if(res.number){
-      orderID = res.id;
-      document.getElementById("id").innerText = res.id;
-      document.getElementById("nomor").innerText = res.number;
-      document.getElementById("btnCopyNomor").style.display = "block";
-      document.getElementById("status").innerText = "Menunggu SMS...";
-      
-      localStorage.setItem('saved_id', orderID);
-      localStorage.setItem('saved_num', res.number);
-      localStorage.setItem('active_server', srv); 
-      
-      navigator.clipboard.writeText(res.number);
-      showToast("Nomor Disalin!");
-      clearInterval(timer);
-      timer = setInterval(cekOTP, 5000);
-    } else {
-      alert("Gagal: " + (res.error || "Cek saldo / stok operator"));
-      document.getElementById("nomor").innerText = "-";
-    }
-  });
-}
+            try {
+                const res = await fetch(`${API_BASE}/check?id=${id}&server=${server}`);
+                const data = await res.json();
 
-function cekOTP(){
-  if(!orderID) return;
-  const srv = localStorage.getItem('active_server') || "hero";
-  
-  fetch(`https://aihomestore.alazam04.workers.dev/api/check?server=${srv}&id=${orderID}`)
-  .then(r => r.json())
-  .then(res => {
-    if(res.otp && res.otp !== "-"){
-      document.getElementById("otp").innerText = res.otp;
-      document.getElementById("status").innerText = "OTP MASUK!";
-      localStorage.setItem('saved_otp', res.otp);
-      
-      notifySound.play();
-      navigator.clipboard.writeText(res.otp); // Copy tanpa toast
-      
-      clearInterval(timer);
-    }
-  });
-}
+                if (data.otp && data.otp !== "-") {
+                    document.getElementById('otp-box').innerText = data.otp;
+                    document.getElementById('otp-box').style.color = "#4ade80"; // Hijau saat ready
+                    document.getElementById('status-desc').innerText = "OTP MASUK!";
+                    
+                    // Bunyikan suara & Copy otomatis
+                    document.getElementById('notif-sound').play();
+                    navigator.clipboard.writeText(data.otp);
+                    
+                    clearInterval(checkTimer);
+                }
+            } catch (e) {}
+        }
 
-function resetOrder(){
-    clearInterval(timer);
-    orderID = "";
-    localStorage.removeItem('saved_id');
-    localStorage.removeItem('saved_num');
-    localStorage.removeItem('saved_otp');
-    localStorage.removeItem('active_server');
-    document.getElementById("id").innerText = "-";
-    document.getElementById("nomor").innerText = "-";
-    document.getElementById("otp").innerText = "WAITING";
-    document.getElementById("status").innerText = "Ready...";
-    document.getElementById("btnCopyNomor").style.display = "none";
-}
+        function clearData() {
+            localStorage.clear();
+            location.reload();
+        }
 
-function copyDirect(t){ navigator.clipboard.writeText(t); showToast("Link Disalin!"); }
-function copyTeks(id, manual) { 
-    let teks = document.getElementById(id).innerText;
-    if(teks === "WAITING" || teks === "-") return;
-    navigator.clipboard.writeText(teks); 
-    if(manual) showToast("Disalin!"); 
-}
-</script>
+        function copyNumber() {
+            const num = document.getElementById('display-number').innerText;
+            if(num && num !== "Ready...") {
+                navigator.clipboard.writeText(num);
+                alert("Nomor HP disalin!");
+            }
+        }
+
+        // Generator Data Random
+        function generateRandomData() {
+            const names = ["Budi Santoso", "Siti Aminah", "Andi Wijaya", "Maya Wibowo", "Rian Hidayat", "Dewi Lestari"];
+            const streets = ["Jl. Merdeka No. 10", "Jl. Gajah Mada No. 14", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5"];
+            const cities = ["Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)"];
+
+            document.getElementById('util-nama').innerText = names[Math.floor(Math.random() * names.length)];
+            document.getElementById('util-alamat').innerText = streets[Math.floor(Math.random() * streets.length)];
+            document.getElementById('util-detail').innerText = cities[Math.floor(Math.random() * cities.length)];
+        }
+    </script>
 </body>
 </html>
-                      
