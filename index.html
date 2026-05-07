@@ -10,16 +10,17 @@
         :root { --bg-dark: #121826; --card-dark: #1e293b; --accent-orange: #f97316; --text-light: #f8fafc; }
         body { background-color: var(--bg-dark); color: var(--text-light); font-family: 'Segoe UI', Tahoma, sans-serif; padding: 15px; }
         .main-card { background-color: var(--card-dark); border-radius: 15px; padding: 20px; border: 1px solid #334155; margin-bottom: 20px; }
-        .section-title { font-size: 0.9rem; font-weight: bold; color: #60a5fa; border-left: 4px solid #3b82f6; padding-left: 10px; margin-bottom: 15px; }
+        .section-title { font-size: 0.9rem; font-weight: bold; color: #60a5fa; border-left: 4px solid #3b82f6; padding-left: 10px; margin-bottom: 15px; text-transform: uppercase; }
         .form-select, .form-control { background-color: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; font-size: 0.75rem; font-weight: 500; }
         .form-select:focus, .form-control:focus { background-color: #0f172a; color: white; border-color: var(--accent-orange); box-shadow: none; }
         .btn-order { background-color: var(--accent-orange); color: white; font-weight: bold; width: 100%; padding: 12px; border-radius: 10px; border: none; transition: 0.3s; margin-top: 10px; }
         .otp-display { background-color: #0f172a; border: 2px dashed #334155; border-radius: 15px; padding: 25px; text-align: center; margin-top: 20px; }
         #otp-box { font-size: 2.8rem; font-weight: 800; color: #fbbf24; letter-spacing: 5px; }
         .data-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
-        .btn-util { background-color: #334155; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; }
+        .btn-util { background-color: #334155; color: white; border: none; padding: 8px 15px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; }
+        .btn-success-custom { background-color: #059669; color: white; }
         .link-item { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .link-name { font-size: 0.75rem; font-weight: bold; color: #94a3b8; }
+        .link-name { font-size: 0.75rem; font-weight: bold; color: #94a3b8; text-transform: uppercase;}
         .btn-copy-link { color: #60a5fa; border: 1px solid #3b82f6; font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; text-decoration: none; }
     </style>
 </head>
@@ -47,7 +48,7 @@
                 </div>
                 
                 <div class="col-12 mt-2" id="sniperBox" style="display:none;">
-                    <input type="number" id="targetPrice" class="form-control" placeholder="Bidik Harga SMSCode (Misal: 134) - Opsional">
+                    <input type="number" id="targetPrice" class="form-control" placeholder="Bidik Harga SMSCode (Misal: 115) - Opsional">
                 </div>
             </div>
 
@@ -64,7 +65,7 @@
             </div>
 
             <div class="d-flex justify-content-between mt-3">
-                <button class="btn-util w-50 me-1" onclick="copyNumber()">COPY NOMOR</button>
+                <button class="btn-util w-50 me-1 btn-success-custom" onclick="copyNumber()">COPY NOMOR</button>
                 <button class="btn-util w-50 ms-1" onclick="clearData()">CLEAR DATA</button>
             </div>
         </div>
@@ -76,15 +77,30 @@
                 <div class="mb-1">Alamat: <b id="util-alamat" class="text-success">-</b></div>
                 <div>Detail: <b id="util-detail" class="text-success">-</b></div>
             </div>
-            <button class="btn-util w-100" onclick="generateRandomData()">GENERATE DATA BARU</button>
+            <div class="d-flex justify-content-between">
+                <button class="btn-util w-50 me-1" onclick="generateRandomData()">GENERATE BARU</button>
+                <button class="btn-util w-50 ms-1 btn-success-custom" onclick="copyAlamatData()">COPY DATA</button>
+            </div>
         </div>
         
         <div class="main-card">
             <div class="section-title">🔗 LINK ORDER SHOPEE</div>
             <div class="link-item"><span class="link-name">AWAW 1</span><a href="https://s.shopee.co.id/6VKFY7rZoL" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">AWAW 2</span><a href="https://s.shopee.co.id/6px5wm8CN6" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">AWAW 3</span><a href="https://s.shopee.co.id/901aWmbQPp" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">AWAW 4</span><a href="https://s.shopee.co.id/7ppd8fwWIc" target="_blank" class="btn-copy-link">BUKA</a></div>
+            
+            <div class="link-item"><span class="link-name">WHITE CYBER</span><a href="https://s.shopee.co.id/9fHHK4KU73" target="_blank" class="btn-copy-link">BUKA</a></div>
             <div class="link-item"><span class="link-name">ALFA DIGITAL</span><a href="https://s.shopee.co.id/4qC1ZEp4uu" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">SRIBUFOLLS</span><a href="https://s.shopee.co.id/3Vgdyp7e4p" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">HELENA STUFF</span><a href="https://s.shopee.co.id/AADXv6H81t" target="_blank" class="btn-copy-link">BUKA</a></div>
             <div class="link-item"><span class="link-name">SECRET PANEL</span><a href="https://s.shopee.co.id/4AwKm7hE75" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">PROMETIXPANEL</span><a href="https://s.shopee.co.id/9KeQve7UK9" target="_blank" class="btn-copy-link">BUKA</a></div>
+            
             <div class="link-item"><span class="link-name">YOAKE 1</span><a href="https://s.shopee.co.id/8fOk8T99r5" target="_blank" class="btn-copy-link">BUKA</a></div>
+            <div class="link-item"><span class="link-name">YOAKE 2</span><a href="https://s.shopee.co.id/3LNDmhKKrw" target="_blank" class="btn-copy-link">BUKA</a></div>
+            
+            <div class="link-item"><span class="link-name">MAMA WHITE CYBER</span><a href="https://s.shopee.co.id/2g7J598NmS" target="_blank" class="btn-copy-link">BUKA</a></div>
         </div>
 
     </div>
@@ -126,7 +142,6 @@
             document.getElementById('display-number').innerText = "Ordering...";
 
             try {
-                // KIRIM REQUEST DENGAN TARGET HARGA (Jika ada)
                 const res = await fetch(`${API_BASE}/order?server=${server}&operator=${operator}&targetprice=${targetPrice}`);
                 const data = await res.json();
 
@@ -165,10 +180,35 @@
         }
 
         function clearData() { localStorage.clear(); location.reload(); }
-        function copyNumber() { const num = document.getElementById('display-number').innerText; if(num && num !== "Ready...") { navigator.clipboard.writeText(num); alert("Nomor disalin!"); } }
+        
+        function copyNumber() { 
+            const num = document.getElementById('display-number').innerText; 
+            if(num && num !== "Ready...") { navigator.clipboard.writeText(num); alert("Nomor HP disalin!"); } 
+        }
+
         function generateRandomData() {
-            const names = ["Budi Santoso", "Siti Aminah", "Andi Wijaya", "Maya Wibowo"]; const streets = ["Jl. Merdeka No. 10", "Jl. Melati Blok C"]; const cities = ["Jakarta (10110)", "Bandung (40111)"];
-            document.getElementById('util-nama').innerText = names[Math.floor(Math.random() * names.length)]; document.getElementById('util-alamat').innerText = streets[Math.floor(Math.random() * streets.length)]; document.getElementById('util-detail').innerText = cities[Math.floor(Math.random() * cities.length)];
+            const names = ["Budi Santoso", "Siti Aminah", "Andi Wijaya", "Maya Wibowo", "Rian Hidayat", "Dewi Lestari"]; 
+            const streets = ["Jl. Merdeka No. 10", "Jl. Melati Blok C", "Perum Cahaya Indah No. 5", "Jl. Gajah Mada No. 14"]; 
+            const cities = ["Jakarta (10110)", "Bandung (40111)", "Surabaya (60111)", "Tangerang (15111)"];
+            document.getElementById('util-nama').innerText = names[Math.floor(Math.random() * names.length)]; 
+            document.getElementById('util-alamat').innerText = streets[Math.floor(Math.random() * streets.length)]; 
+            document.getElementById('util-detail').innerText = cities[Math.floor(Math.random() * cities.length)];
+        }
+
+        // FITUR BARU: COPY DATA ALAMAT SEKALIGUS
+        function copyAlamatData() {
+            const nama = document.getElementById('util-nama').innerText;
+            const alamat = document.getElementById('util-alamat').innerText;
+            const detail = document.getElementById('util-detail').innerText;
+            
+            if(nama === "-") {
+                alert("Klik tombol GENERATE BARU terlebih dahulu!");
+                return;
+            }
+
+            const textToCopy = `${nama}\n${alamat}\n${detail}`;
+            navigator.clipboard.writeText(textToCopy);
+            alert("Data Nama & Alamat berhasil disalin!");
         }
     </script>
 </body>
